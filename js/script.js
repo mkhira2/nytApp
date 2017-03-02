@@ -15,9 +15,21 @@ var DetailsView = Backbone.View.extend({
         var containerNode = document.querySelector('.pageContent')
         var html = ''
         if (this.model.get('multimedia').length) {
-            html += '<img src="http://www.nytimes.com/' + this.model.get('multimedia')[0].url + '">'
-        } //if the multimedia exists we render the multimedia
-        // the image otherwise we render not available or dummy image
+            html += '<img class="fetchedArt" src="http://www.nytimes.com/' + this.model.get('multimedia')[0].url + '">'
+        }
+        else {
+        	html+= 'No image available'
+        }
+        html += '<br />'
+        if (this.model.get('section_name')) {
+            html += '<div class="sectionName">' + 'From Section: ' + this.model.get('section_name') + '</div>'
+        }
+        else {
+        	html += 'No section available'
+        }
+        html += '<div class="headline">' + this.model.get('headline')['main'] + '</div>'
+        html += '<div class="leadParagraph">' + this.model.get('lead_paragraph') + '</div>'
+        
         containerNode.innerHTML = html
     }
 })
