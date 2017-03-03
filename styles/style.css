@@ -5,13 +5,15 @@ body {
 
 .title {
 	font-size: 75px;
-	padding-bottom: 10px;
 	font-family: 'Domine', Helvetica;
+	padding-bottom: 5px;
+	border-bottom: 2px solid white;
 }
 
 .search {
 	width: 40%;
 	text-align: center;
+	margin: 10px 0;
 }
 
 .container {
