@@ -1,5 +1,30 @@
+//--------------------------------------------------
+// MODELS
+//--------------------------------------------------
+var TimesCollection = Backbone.Collection.extend({
 
-    ///VIEWS 
+    url: 'https://api.nytimes.com/svc/search/v2/articlesearch.json',
+    parse: function(apiResponse) {
+        //parse takes in the api response and will return the array that we want 
+        console.log(apiResponse)
+        return apiResponse.response.docs
+    }
+})
+
+var TimesModel = Backbone.Model.extend({
+    url: 'https://api.nytimes.com/svc/search/v2/articlesearch.json',
+    parse: function(apiResponse) {
+        return apiResponse.response.docs[0]
+    }
+})
+
+
+
+
+
+//--------------------------------------------------
+// VIEWS
+//--------------------------------------------------
 var setHomePage = function() {
     var containerNode = document.querySelector('.pageContent')
     var html = ''
@@ -38,7 +63,6 @@ var ListView = Backbone.View.extend({
     initialize: function() {
         console.log('list view', this)
         document.querySelector('.pageContent').innerHTML = '<img src="default.gif">'
-        console.log('here comes the collection', this.collection)
             //listenTo takes 3 inputs: 
             //(1) the object we are listening to
             //(2) the name of the event that the object will broadcast
@@ -48,7 +72,6 @@ var ListView = Backbone.View.extend({
         this.listenTo(this.collection, 'sync', this._render)
     },
     _render: function() {
-        console.log('here comes view in _render', this)
         var containerNode = document.querySelector('.pageContent')
         var html = ''
         this.collection.forEach(function(inputModel) {
@@ -80,25 +103,12 @@ searchNode.addEventListener('keydown', function(eventObj) {
             eventObj.target.value = ''
         }
     })
-    //MODELS (COLLECTIONS)
-var TimesCollection = Backbone.Collection.extend({
 
-    url: 'https://api.nytimes.com/svc/search/v2/articlesearch.json',
-    parse: function(apiResponse) {
-        //parse takes in the api response and will return the array that we want 
-        console.log(apiResponse)
-        return apiResponse.response.docs
-    }
-})
 
-var TimesModel = Backbone.Model.extend({
-    url: 'https://api.nytimes.com/svc/search/v2/articlesearch.json',
-    parse: function(apiResponse) {
-        return apiResponse.response.docs[0]
-    }
-})
+//--------------------------------------------------
+// CONTROLLER
+//--------------------------------------------------
 
-//CONTROLLER
 var TimesRouter = Backbone.Router.extend({
     //takes key value of a route and then the value is equal to a method as a string
     //define route, define what it matches to
@@ -123,17 +133,7 @@ var TimesRouter = Backbone.Router.extend({
         var viewInstance = new ListView({
             collection: collectionInstance
         })
-        viewInstance.hello = 'there'
-            // promise.then(function(){
-            // 	console.log(collectionInstance)
-            // 	var html = ''
-            // 	var docsArray = collectionInstance.models
-            // 	for(var index = 0; index < docsArray.length; index = index + 1){
-            // 		var docModel = docsArray[index]
-            // 		html += '<h3>' + docModel.get('snippet') + '</h3>'
-            // 	}
-            // 	document.querySelector('.pageContent').innerHTML = html
-            // })
+
     },
     showDetailPage: function(articleID) {
         var modelInstance = new TimesModel() //new instance of model
